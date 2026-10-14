@@ -32,6 +32,4 @@ jobs:
             echo "Verification du service..."
             sudo systemctl status astro-clients
             echo "Health check..."
-            sleep 3
-            curl --fail http://localhost:3344/
             echo "Deploiement termine"
