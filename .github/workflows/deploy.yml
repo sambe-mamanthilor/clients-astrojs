@@ -1,0 +1,28 @@
+name: Deploy Astro Clients SSR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: 23021
+          script: |
+            cd /var/www/astro-clients-ssr
+            git pull origin main
+            /home/etudiant/.bun/bin/bun install
+            /home/etudiant/.bun/bin/bun run build
+            sudo systemctl restart astro-clients
